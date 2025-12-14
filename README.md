@@ -1,4 +1,4 @@
-# IoT_Capstone_Project
+# IoT Capstone Project
 Trabalho de conclusão de curso da disciplina de IoT
 ## Alunos:
 - Rebecca Hardman
