@@ -24,6 +24,21 @@ class SensorService {
             timestamp: new Date().toISOString()
         };
     }
+
+    registrarAlarme(dadosAlarme) {
+        console.log("ALARME RECEBIDO");
+        console.log("Motivo:", dadosAlarme.motivo);
+        console.log("Nível de Perigo:", dadosAlarme.nivel);
+        console.log(`Sensores no momento: T=${dadosAlarme.temperatura}, D=${dadosAlarme.distancia}`);
+
+        // Integrar logica e envio de email após teste. Usar Codigo adicionado por becca
+
+        return {
+            sucesso: true,
+            mensagem: "Alarme registrado com prioridade máxima",
+            timestamp: new Date().toISOString()
+        };
+    }
 }
 
 module.exports = new SensorService();
