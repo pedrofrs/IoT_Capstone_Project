@@ -20,7 +20,7 @@ exports.receberDados = (req, res) => {
 
 };
 
-exports.receberAlarme = (req, res) => {
+exports.receberAlarme = async (req, res) => {
     try {
         const dadosAlarme = req.body;
 
@@ -28,7 +28,8 @@ exports.receberAlarme = (req, res) => {
             return res.status(400).json({ erro: "Motivo do alarme é obrigatório" });
         }
 
-        const resultado = sensorService.registrarAlarme(dadosAlarme);
+        const resultado = await sensorService.registrarAlarme(dadosAlarme);
+
         return res.status(200).json(resultado);
 
     } catch (error) {
