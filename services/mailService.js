@@ -1,10 +1,10 @@
 const Mailjet = require("node-mailjet");
 
 if (!process.env.MJ_APIKEY_PUBLIC || !process.env.MJ_APIKEY_PRIVATE || !process.env.MAILJET_EMAIL) {
-    throw new Error("Mailjet env vars missing: MJ_APIKEY_PUBLIC / MJ_APIKEY_PRIVATE / MAILJET_EMAIL");
+    console.error("ERRO: Variáveis de ambiente do Mailjet não configuradas!");
 }
 
-const mailjet = Mailjet.connect(
+const mailjet = Mailjet.apiConnect(
     process.env.MJ_APIKEY_PUBLIC,
     process.env.MJ_APIKEY_PRIVATE
 );
@@ -12,25 +12,27 @@ const mailjet = Mailjet.connect(
 const EMAIL_SEND = process.env.MAILJET_EMAIL;
 
 async function enviarEmail({ to, subject, text, html }) {
-    const { body } = await mailjet
-        .post("send", { version: "v3.1" })
-        .request({
-            Messages: [
-                {
-                    From: { Email: EMAIL_SEND, Name: "Equipe Técnica" },
-                    To: [{ Email: to }],
-                    Subject: subject,
-                    TextPart: text,
-                    HTMLPart: html,
-                },
-            ],
-        });
+    try {
+        const result = await mailjet
+            .post("send", { version: "v3.1" })
+            .request({
+                Messages: [
+                    {
+                        From: { Email: EMAIL_SEND, Name: "Sistema IoT Alerta" },
+                        To: [{ Email: to }],
+                        Subject: subject,
+                        TextPart: text,
+                        HTMLPart: html,
+                    },
+                ],
+            });
 
-    const msg = body?.Messages?.[0];
-    if (!msg || msg.Status !== "success") {
-        throw new Error(`Falha ao enviar e-mail: ${JSON.stringify(msg)}`);
+        console.log(` E-mail enviado com sucesso para ${to}`);
+        return result.body;
+    } catch (error) {
+        console.error("Falha ao enviar e-mail:", error.statusCode);
+        throw error;
     }
-    return msg;
 }
 
 module.exports = { enviarEmail };
