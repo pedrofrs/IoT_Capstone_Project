@@ -1,0 +1,23 @@
+const express = require('express');
+const cors = require('cors');
+const sensorRoutes = require('./routes/sensorRoutes');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+
+app.get('/', (req, res) => {
+    res.send('API IoT Online! Use /api/sensores para envio.');
+});
+
+// ENDPOINTS
+app.use('/api/sensores', sensorRoutes);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+module.exports = app;
