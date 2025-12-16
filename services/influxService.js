@@ -4,14 +4,23 @@ require("dotenv").config();
 const influxDB = new InfluxDB({
     url: process.env.INFLUX_URL,
     token: process.env.INFLUX_TOKEN,
-    timeout: 20_000
+    timeout: 50_000
 });
 
 const ORG = process.env.INFLUX_ORG;
 const BUCKET = process.env.INFLUX_BUCKET;
 
-const writeApi = influxDB.getWriteApi(ORG, BUCKET, "ns");
-
+const writeApi = influxDB.getWriteApi(
+    ORG,
+    BUCKET,
+    "ns",
+    {
+        batchSize: 1,
+        flushInterval: 1_000,
+        maxRetries: 3,
+        maxRetryDelay: 5_000
+    }
+);
 writeApi.useDefaultTags({ app: "sensor-api" });
 
 function salvarTelemetria(dados) {

@@ -24,7 +24,7 @@ const server = app.listen(PORT, () => {
 
 
 async function shutdown(signal) {
-    console.log(`\n⏳ Recebido sinal ${signal}. Encerrando aplicação...`);
+    console.log(`\nRecebido sinal ${signal}. Encerrando aplicação...`);
 
     try {
         await encerrarInflux();
