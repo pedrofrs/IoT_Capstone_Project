@@ -1,4 +1,6 @@
 const Mailjet = require("node-mailjet");
+require("dotenv").config();
+
 
 if (!process.env.MJ_APIKEY_PUBLIC || !process.env.MJ_APIKEY_PRIVATE) {
     throw new Error("ERRO: Variáveis de ambiente do Mailjet não configuradas!");
