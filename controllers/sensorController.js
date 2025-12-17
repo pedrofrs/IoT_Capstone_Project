@@ -37,3 +37,12 @@ exports.receberAlarme = async (req, res) => {
         return res.status(500).json({ erro: "Falha interna" });
     }
 };
+
+exports.listarHistorico = (req, res) => {
+    try {
+        const historico = sensorService.obterHistorico();
+        return res.status(200).json(historico);
+    } catch (error) {
+        return res.status(500).json({ erro: "Erro ao buscar histórico" });
+    }
+};

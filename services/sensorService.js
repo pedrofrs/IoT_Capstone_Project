@@ -5,6 +5,10 @@ const { salvarTelemetria } = require('./influxService');
 
 class SensorService {
 
+    constructor() {
+        this.historicoLeituras = [];
+    }
+
     processarLeituras(dados) {
         if (!dados.temperatura || !dados.umidade) {
             throw new Error("Dados inválidos: Temperatura e Umidade são obrigatórios.");
@@ -23,23 +27,16 @@ class SensorService {
             console.log("ALERTAS GERADOS:", alertas);
         }
 
-        // salvarTelemetria({
-        //     deviceId: dados.deviceId,
-        //     temp: dados.temperatura,
-        //     hum: dados.umidade,
-        //     ldr: dados.lux,
-        //     alertTemp,
-        //     alertHum,
-        //     alertAny,
-        //     ts: Date.now()
-        // });
-
-        return {
+        const resultadoProcessado = {
             sucesso: true,
             dadosProcessados: dados,
             alertas: alertas,
             timestamp: new Date().toISOString()
         };
+
+        this.historicoLeituras.push(resultadoProcessado);
+
+        return resultadoProcessado;
     }
 
     async registrarAlarme(dadosAlarme) {
@@ -63,6 +60,10 @@ class SensorService {
             statusNotificacao: statusEmail,
             timestamp: new Date().toISOString()
         };
+    }
+
+    obterHistorico() {
+        return this.historicoLeituras;
     }
 }
 

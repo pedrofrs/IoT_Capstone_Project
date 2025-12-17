@@ -7,5 +7,6 @@ const sensorController = require('../controllers/sensorController');
 router.post('/', sensorController.receberDados);
 router.get('/', (req, res) => res.send('Rota de sensores operante.'));
 router.post('/alarme', sensorController.receberAlarme);
+router.get('/historico', sensorController.listarHistorico);
 
 module.exports = router;
