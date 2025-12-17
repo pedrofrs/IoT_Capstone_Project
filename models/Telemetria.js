@@ -1,29 +1,17 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const TelemetriaSchema = new mongoose.Schema(
-    {
-        deviceId: {
-            type: String,
-            required: true,
-            index: true
-        },
-        temperatura: Number,
-        umidade: Number,
-        ldr: Number,
+const TelemetriaSchema = new mongoose.Schema({
+    deviceId: { type: String, required: true },
+    temperatura: { type: Number, required: true },
+    umidade: { type: Number, required: true },
+    ldr: { type: Number, default: 0 },
 
-        alertTemp: Boolean,
-        alertHum: Boolean,
-        alertAny: Boolean,
+    // Flags de alerta
+    alertTemp: { type: Boolean, default: false },
+    alertHum: { type: Boolean, default: false },
+    alertAny: { type: Boolean, default: false },
 
-        timestamp: {
-            type: Date,
-            default: Date.now,
-            index: true
-        }
-    },
-    {
-        versionKey: false
-    }
-);
+    timestamp: { type: Date, default: Date.now }
+});
 
-module.exports = mongoose.model("Telemetria", TelemetriaSchema);
+module.exports = mongoose.model('Telemetria', TelemetriaSchema);

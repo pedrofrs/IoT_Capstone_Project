@@ -4,8 +4,8 @@ require("dotenv").config();
 
 async function conectarMongo() {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            dbName: process.env.MONGO_DB,
+        await mongoose.connect("mongodb+srv://pedrofrs:pedrofrs@cluster0.qv8d7ym.mongodb.net", {
+            dbName: "iot_capstone",
             serverSelectionTimeoutMS: 5000
         });
 
