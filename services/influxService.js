@@ -1,31 +1,33 @@
 const { InfluxDB, Point } = require("@influxdata/influxdb-client");
 require("dotenv").config();
 
-const influxDB = new InfluxDB({
+const influx = new InfluxDB({
     url: process.env.INFLUX_URL,
     token: process.env.INFLUX_TOKEN,
-    timeout: 30_000
 });
 
-const writeApi = influxDB.getWriteApi(
+const writeApi = influx.getWriteApi(
     process.env.INFLUX_ORG,
     process.env.INFLUX_BUCKET,
-    "ns",
-    {
-        batchSize: 1,
-        flushInterval: 1_000,
-        maxRetries: 3
-    }
+    "ns"
 );
 
-function salvarTelemetria(dados) {
-    const point = new Point("warehouse_env")
-        .floatField("temperatura", dados.temp)
-        .floatField("umidade", dados.hum)
-        .booleanField("alertAny", dados.alertAny)
-        .timestamp(new Date());
+function salvarTelemetria(t) {
+    try {
+        const point = new Point("warehouse_env")
+            .tag("deviceId", t.deviceId || "device-001")
+            .floatField("temperatura", t.temp)
+            .floatField("umidade", t.hum)
+            .intField("ldr", t.ldr || 0)
+            .booleanField("alertTemp", t.alertTemp)
+            .booleanField("alertHum", t.alertHum)
+            .booleanField("alertAny", t.alertAny)
+            .timestamp(new Date(t.ts || Date.now()));
 
-    writeApi.writePoint(point);
+        writeApi.writePoint(point);
+    } catch (err) {
+        console.error("Erro ao salvar no InfluxDB:", err.message);
+    }
 }
 
 module.exports = { salvarTelemetria };
