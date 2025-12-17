@@ -1,32 +1,24 @@
-const { InfluxDB, Point } = require("@influxdata/influxdb-client");
-require("dotenv").config();
+const Telemetria = require("../models/Telemetria");
 
-const influx = new InfluxDB({
-    url: process.env.INFLUX_URL,
-    token: process.env.INFLUX_TOKEN,
-});
-
-const writeApi = influx.getWriteApi(
-    process.env.INFLUX_ORG,
-    process.env.INFLUX_BUCKET,
-    "ns"
-);
-
-function salvarTelemetria(t) {
+async function salvarTelemetria(t) {
     try {
-        const point = new Point("warehouse_env")
-            .tag("deviceId", t.deviceId || "device-001")
-            .floatField("temperatura", t.temp)
-            .floatField("umidade", t.hum)
-            .intField("ldr", t.ldr || 0)
-            .booleanField("alertTemp", t.alertTemp)
-            .booleanField("alertHum", t.alertHum)
-            .booleanField("alertAny", t.alertAny)
-            .timestamp(new Date(t.ts || Date.now()));
+        const registro = await Telemetria.create({
+            deviceId: t.deviceId || "device-001",
+            temperatura: t.temp,
+            umidade: t.hum,
+            ldr: t.ldr || 0,
 
-        writeApi.writePoint(point);
+            alertTemp: t.alertTemp,
+            alertHum: t.alertHum,
+            alertAny: t.alertAny,
+
+            timestamp: t.ts ? new Date(t.ts) : new Date()
+        });
+
+        return registro;
     } catch (err) {
-        console.error("Erro ao salvar no InfluxDB:", err.message);
+        console.error("Erro ao salvar telemetria no MongoDB:", err.message);
+        throw err;
     }
 }
 

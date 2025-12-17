@@ -1,20 +1,22 @@
-const express = require('express');
+const express = require("express");
 require("dotenv").config();
-const cors = require('cors');
-const sensorRoutes = require('./routes/sensorRoutes');
+const cors = require("cors");
+
+const { conectarMongo } = require("./config/mongo");
+const sensorRoutes = require("./routes/sensorRoutes");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+conectarMongo();
 
-app.get('/', (req, res) => {
-    res.send('API IoT Online! Use /api/sensores para envio.');
+app.get("/", (req, res) => {
+    res.send("API IoT Online! MongoDB ativo 🚀");
 });
 
-// ENDPOINTS
-app.use('/api/sensores', sensorRoutes);
+app.use("/api/sensores", sensorRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
