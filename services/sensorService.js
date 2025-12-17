@@ -23,16 +23,16 @@ class SensorService {
             console.log("ALERTAS GERADOS:", alertas);
         }
 
-        salvarTelemetria({
-            deviceId: dados.deviceId,
-            temp: dados.temperatura,
-            hum: dados.umidade,
-            ldr: dados.lux,
-            alertTemp,
-            alertHum,
-            alertAny,
-            ts: Date.now()
-        });
+        // salvarTelemetria({
+        //     deviceId: dados.deviceId,
+        //     temp: dados.temperatura,
+        //     hum: dados.umidade,
+        //     ldr: dados.lux,
+        //     alertTemp,
+        //     alertHum,
+        //     alertAny,
+        //     ts: Date.now()
+        // });
 
         return {
             sucesso: true,
