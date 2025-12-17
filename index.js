@@ -2,7 +2,6 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 
-const { conectarMongo } = require("./config/mongo");
 const sensorRoutes = require("./routes/sensorRoutes");
 
 const app = express();
@@ -10,7 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-conectarMongo();
 
 app.get("/", (req, res) => {
     res.send("API IoT Online! MongoDB ativo 🚀");
